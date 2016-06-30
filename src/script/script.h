@@ -173,7 +173,9 @@ enum opcodetype
     OP_NOP8 = 0xb7,
     OP_NOP9 = 0xb8,
     OP_NOP10 = 0xb9,
-
+    
+    // qtum expansion opcode set 0xD0 - 0xF0
+    OP_EXECVM = 0xd0,
 
     // template matching params
     OP_SMALLINTEGER = 0xfa,

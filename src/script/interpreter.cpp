@@ -63,6 +63,12 @@ static inline void popstack(vector<valtype>& stack)
     stack.pop_back();
 }
 
+
+bool static ExecuteVMOpcode(const valtype &data, const valtype &version){
+    return false;
+}
+
+
 bool static IsCompressedOrUncompressedPubKey(const valtype &vchPubKey) {
     if (vchPubKey.size() < 33) {
         //  Non-canonical public key: too short
@@ -984,6 +990,17 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                         else
                             return set_error(serror, SCRIPT_ERR_CHECKMULTISIGVERIFY);
                     }
+                }
+                break;
+
+
+                case OP_EXECVM:
+                {
+                    // ( [vm_data] vm_version -- return)
+                    if (stack.size() < 2)
+                        return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
+                    bool fValue = CastToBool(stacktop(-1));
+                    return set_error(serror, SCRIPT_ERR_OP_EXECVM);
                 }
                 break;
 

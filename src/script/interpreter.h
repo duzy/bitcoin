@@ -86,6 +86,9 @@ enum
     //
     // See BIP112 for details
     SCRIPT_VERIFY_CHECKSEQUENCEVERIFY = (1U << 10),
+
+    // spends generated through EXECVM should not be allowed on P2P network
+    SCRIPT_VERIFY_NO_VM_SPENDS = (1U << 11)
 };
 
 bool CheckSignatureEncoding(const std::vector<unsigned char> &vchSig, unsigned int flags, ScriptError* serror);

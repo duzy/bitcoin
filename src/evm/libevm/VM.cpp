@@ -21,6 +21,7 @@
 
 #include "VM.h"
 #include <libethereum/ExtVM.h>
+
 using namespace std;
 using namespace dev;
 using namespace dev::eth;
