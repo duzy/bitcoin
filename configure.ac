@@ -383,6 +383,12 @@ if test x$use_lcov = xyes; then
     [AC_MSG_ERROR("lcov testing requested but --coverage flag does not work")])
 fi
 
+dnl Check for C++17, C++14, C++11 standards
+AX_CHECK_COMPILE_FLAG([-std=c++17],[CXXFLAGS="$CXXFLAGS -std=c++17"],[
+AX_CHECK_COMPILE_FLAG([-std=c++14],[CXXFLAGS="$CXXFLAGS -std=c++14"],[
+AX_CHECK_COMPILE_FLAG([-std=c++11],[CXXFLAGS="$CXXFLAGS -std=c++11"],[
+  AC_MSG_ERROR("g++ testing requested but -std=c++XX does not work")])])])
+
 dnl Check for endianness
 AC_C_BIGENDIAN
 
@@ -530,6 +536,14 @@ AM_CONDITIONAL([EMBEDDED_LEVELDB],[true])
 AC_SUBST(LEVELDB_CPPFLAGS)
 AC_SUBST(LIBLEVELDB)
 AC_SUBST(LIBMEMENV)
+
+AM_CONDITIONAL([BUILD_QUANTUM_EVM_DEVCORE],[true])
+AM_CONDITIONAL([BUILD_QUANTUM_EVM_DEVCRYPTO],[false])
+AM_CONDITIONAL([BUILD_QUANTUM_EVM_ETHCORE],[false])
+AM_CONDITIONAL([BUILD_QUANTUM_EVM_ETHEREUM],[false])
+AM_CONDITIONAL([BUILD_QUANTUM_EVM_EVM],[true])
+AM_CONDITIONAL([BUILD_QUANTUM_EVM_EVMCORE],[true])
+AM_CONDITIONAL([BUILD_QUANTUM_EVM_EVMJIT],[false])
 
 if test x$enable_wallet != xno; then
     dnl Check for libdb_cxx only if wallet enabled
@@ -940,7 +954,7 @@ AC_SUBST(TESTDEFS)
 AC_SUBST(LEVELDB_TARGET_FLAGS)
 AC_SUBST(MINIUPNPC_CPPFLAGS)
 AC_SUBST(MINIUPNPC_LIBS)
-AC_CONFIG_FILES([Makefile src/Makefile share/setup.nsi share/qt/Info.plist src/test/buildenv.py])
+AC_CONFIG_FILES([Makefile src/Makefile src/evm/Makefile share/setup.nsi share/qt/Info.plist src/test/buildenv.py])
 AC_CONFIG_FILES([qa/pull-tester/run-bitcoind-for-test.sh],[chmod +x qa/pull-tester/run-bitcoind-for-test.sh])
 AC_CONFIG_FILES([qa/pull-tester/tests_config.py],[chmod +x qa/pull-tester/tests_config.py])
 

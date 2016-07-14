@@ -1,4 +1,5 @@
 DIST_SUBDIRS = secp256k1 univalue
+SUBDIRS = evm
 
 AM_LDFLAGS = $(PTHREAD_CFLAGS) $(LIBTOOL_LDFLAGS) $(HARDENED_LDFLAGS)
 AM_CXXFLAGS = $(HARDENED_CXXFLAGS)
@@ -34,12 +35,18 @@ LIBBITCOIN_CRYPTO=crypto/libbitcoin_crypto.a
 LIBBITCOINQT=qt/libbitcoinqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 LIBUNIVALUE=univalue/libunivalue.la
+LIBQUANTUM_EVM_LIBS=\
+  evm/libquantum_evm.a \
+  evm/libquantum_evmcore.a
 
 $(LIBSECP256K1): $(wildcard secp256k1/src/*) $(wildcard secp256k1/include/*)
 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
-  
+
 $(LIBUNIVALUE): $(wildcard univalue/lib/*) $(wildcard univalue/include/*)
 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
+
+$(LIBQUANTUM_EVM_LIBS): $(wildcard evm/libevm/*)
+	$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
 
 # Make is not made aware of per-object dependencies to avoid limiting building parallelization
 # But to build the less dependent modules first, we manually select their order here:
@@ -347,7 +354,8 @@ quantumd_LDADD = \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBLEVELDB) \
   $(LIBMEMENV) \
-  $(LIBSECP256K1)
+  $(LIBSECP256K1) \
+  $(LIBQUANTUM_EVM_LIBS)
 
 if ENABLE_ZMQ
 quantumd_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
@@ -392,7 +400,8 @@ quantum_tx_LDADD = \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO) \
-  $(LIBSECP256K1)
+  $(LIBSECP256K1) \
+  $(LIBQUANTUM_EVM_LIBS)
 
 quantum_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 #

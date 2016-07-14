@@ -5,8 +5,14 @@ src/bitcoin
 src/bitcoind
 src/bitcoin-cli
 src/bitcoin-tx
+src/quantum
+src/quantumd
+src/quantum-cli
+src/quantum-tx
 src/test/test_bitcoin
+src/test/test_quantum
 src/qt/test/test_bitcoin-qt
+src/qt/test/test_quantum-qt
 
 # autoreconf
 Makefile.in
