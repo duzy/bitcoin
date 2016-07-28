@@ -53,7 +53,7 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, vector<vector<unsi
 
         // Smart contract deploy tx, .
         mTemplates.insert(make_pair(TX_DEPLOYMENT, CScript() << OP_EXTBC << OP_COMPILE << OP_SMALLINTEGER << OP_EQUALVERIFY << OP_SWAP
-                                    << OP_DUP << OP_HASH160 << OP_PUBKEYHASH << OP_EQUALVERIFY << OP_CHECKSIG << OP_EXEC));
+                                    << OP_DUP << OP_HASH160 << OP_PUBKEYHASH << OP_EQUALVERIFY << OP_CHECKSIGVERIFY << OP_EXEC));
         
         // Sender provides N pubkeys, receivers provides M signatures
         mTemplates.insert(make_pair(TX_MULTISIG, CScript() << OP_SMALLINTEGER << OP_PUBKEYS << OP_SMALLINTEGER << OP_CHECKMULTISIG));
