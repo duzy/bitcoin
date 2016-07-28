@@ -20,6 +20,7 @@
 
 // Maximum number of bytes pushable to the stack
 static const unsigned int MAX_SCRIPT_ELEMENT_SIZE = 520;
+static const unsigned int MAX_EXT_BYTECODE_SIZE = 1024;
 
 // Maximum number of non-push operations per script
 static const int MAX_OPS_PER_SCRIPT = 201;
@@ -173,11 +174,13 @@ enum opcodetype
     OP_NOP8 = 0xb7,
     OP_NOP9 = 0xb8,
     OP_NOP10 = 0xb9,
-    
-    // qtum expansion opcode set 0xD0 - 0xF0
-    OP_EXECVM = 0xd0,
+
+    // Execute EXT byte code.
+    OP_COMPILE = 0xc0,
+    OP_EXEC = 0xc1,
 
     // template matching params
+    OP_EXTBC = 0xf9,
     OP_SMALLINTEGER = 0xfa,
     OP_PUBKEYS = 0xfb,
     OP_PUBKEYHASH = 0xfd,

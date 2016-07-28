@@ -30,6 +30,7 @@ const char* GetTxnOutputType(txnouttype t)
     case TX_PUBKEYHASH: return "pubkeyhash";
     case TX_SCRIPTHASH: return "scripthash";
     case TX_MULTISIG: return "multisig";
+    case TX_DEPLOYMENT: return "deployment";
     case TX_NULL_DATA: return "nulldata";
     }
     return NULL;
@@ -50,6 +51,10 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, vector<vector<unsi
         // Bitcoin address tx, sender provides hash of pubkey, receiver provides signature and pubkey
         mTemplates.insert(make_pair(TX_PUBKEYHASH, CScript() << OP_DUP << OP_HASH160 << OP_PUBKEYHASH << OP_EQUALVERIFY << OP_CHECKSIG));
 
+        // Smart contract deploy tx, .
+        mTemplates.insert(make_pair(TX_DEPLOYMENT, CScript() << OP_EXTBC << OP_COMPILE << OP_SMALLINTEGER << OP_EQUALVERIFY << OP_SWAP
+                                    << OP_DUP << OP_HASH160 << OP_PUBKEYHASH << OP_EQUALVERIFY << OP_CHECKSIG << OP_EXEC));
+        
         // Sender provides N pubkeys, receivers provides M signatures
         mTemplates.insert(make_pair(TX_MULTISIG, CScript() << OP_SMALLINTEGER << OP_PUBKEYS << OP_SMALLINTEGER << OP_CHECKMULTISIG));
     }
@@ -148,6 +153,12 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, vector<vector<unsi
                 else
                     break;
             }
+            else if (opcode2 == OP_EXTBC)
+            {
+                if (vch1.size() < 8 || vch1.size() > MAX_EXT_BYTECODE_SIZE)
+                    break;
+                vSolutionsRet.push_back(vch1);
+            }
             else if (opcode1 != opcode2 || vch1 != vch2)
             {
                 // Others must match exactly
@@ -185,6 +196,11 @@ bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet)
     else if (whichType == TX_SCRIPTHASH)
     {
         addressRet = CScriptID(uint160(vSolutions[0]));
+        return true;
+    }
+    else if (whichType == TX_DEPLOYMENT)
+    {
+        addressRet = CScriptID(uint160(vSolutions[2]));
         return true;
     }
     // Multisig txns have more than one address...
@@ -237,23 +253,27 @@ class CScriptVisitor : public boost::static_visitor<bool>
 {
 private:
     CScript *script;
+    bool reset, verify;
+  
 public:
-    CScriptVisitor(CScript *scriptin) { script = scriptin; }
+    CScriptVisitor(CScript *scriptin, bool g = true, bool v = false)
+      : script(scriptin), reset(g), verify(v)
+    {}
 
     bool operator()(const CNoDestination &dest) const {
-        script->clear();
+        if (reset) script->clear();
         return false;
     }
 
     bool operator()(const CKeyID &keyID) const {
-        script->clear();
-        *script << OP_DUP << OP_HASH160 << ToByteVector(keyID) << OP_EQUALVERIFY << OP_CHECKSIG;
+        if (reset) script->clear();
+        *script << OP_DUP << OP_HASH160 << ToByteVector(keyID) << OP_EQUALVERIFY << (verify ? OP_CHECKSIGVERIFY : OP_CHECKSIG);
         return true;
     }
 
     bool operator()(const CScriptID &scriptID) const {
-        script->clear();
-        *script << OP_HASH160 << ToByteVector(scriptID) << OP_EQUAL;
+        if (reset) script->clear();
+        *script << OP_HASH160 << ToByteVector(scriptID) << (verify ? OP_EQUALVERIFY : OP_EQUAL);
         return true;
     }
 };
@@ -262,7 +282,6 @@ public:
 CScript GetScriptForDestination(const CTxDestination& dest)
 {
     CScript script;
-
     boost::apply_visitor(CScriptVisitor(&script), dest);
     return script;
 }
@@ -280,5 +299,14 @@ CScript GetScriptForMultisig(int nRequired, const std::vector<CPubKey>& keys)
     BOOST_FOREACH(const CPubKey& key, keys)
         script << ToByteVector(key);
     script << CScript::EncodeOP_N(keys.size()) << OP_CHECKMULTISIG;
+    return script;
+}
+
+CScript GetScriptForDeployment(const CTxDestination& dest, const std::vector<unsigned char>& bc, int64_t ver)
+{
+    CScript script;
+    script << bc << OP_COMPILE << CScriptNum(ver) << OP_EQUALVERIFY << OP_SWAP;
+    boost::apply_visitor(CScriptVisitor(&script, false, true), dest);
+    script << OP_EXEC ;
     return script;
 }

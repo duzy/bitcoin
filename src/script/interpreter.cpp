@@ -64,11 +64,6 @@ static inline void popstack(vector<valtype>& stack)
 }
 
 
-bool static ExecuteVMOpcode(const valtype &data, const valtype &version){
-    return false;
-}
-
-
 bool static IsCompressedOrUncompressedPubKey(const valtype &vchPubKey) {
     if (vchPubKey.size() < 33) {
         //  Non-canonical public key: too short
@@ -993,14 +988,33 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                 }
                 break;
 
-
-                case OP_EXECVM:
+                case OP_COMPILE:
                 {
-                    // ( [vm_data] vm_version -- return)
+                    // ( bc -- bc ver )
+                    if (stack.size() < 1)
+                        return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
+                    valtype& vch = stacktop(-1);
+                    if (8 < vch.size() && vch.size() <= MAX_EXT_BYTECODE_SIZE) {
+                        stack.push_back(vchZero);
+                    } else {
+                        return set_error(serror, SCRIPT_ERR_COMPILE_BAD_SIZE);
+                    }
+                }
+                break;
+                
+                case OP_EXEC:
+                {
+                    // ( bc, addr -- return )
                     if (stack.size() < 2)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
-                    bool fValue = CastToBool(stacktop(-1));
-                    return set_error(serror, SCRIPT_ERR_OP_EXECVM);
+                    if (flags & SCRIPT_EXEC_BYTE_CODE) {
+                        //valtype& vchVer = stacktop(-3);
+                        //valtype& vchBC = stacktop(-2);
+                        //valtype& vchAddr = stacktop(-1);
+                        stack.push_back(vchFalse);
+                    } else {
+                        stack.push_back(vchTrue);
+                    }
                 }
                 break;
 

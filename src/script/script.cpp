@@ -141,7 +141,9 @@ const char* GetOpName(opcodetype opcode)
     case OP_NOP9                   : return "OP_NOP9";
     case OP_NOP10                  : return "OP_NOP10";
 
-    case OP_EXECVM                 : return "OP_EXECVM";
+    // byte code execution
+    case OP_COMPILE                : return "OP_COMPILE";
+    case OP_EXEC                   : return "OP_EXEC";
 
     case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
 

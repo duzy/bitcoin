@@ -97,6 +97,18 @@ static bool SignStep(const BaseSignatureCreator& creator, const CScript& scriptP
     case TX_MULTISIG:
         scriptSigRet << OP_0; // workaround CHECKMULTISIG bug
         return (SignN(vSolutions, creator, scriptPubKey, scriptSigRet));
+
+    case TX_DEPLOYMENT:
+        keyID = CKeyID(uint160(vSolutions[2]));
+        if (!Sign1(keyID, creator, scriptPubKey, scriptSigRet))
+            return false;
+        else
+        {
+            CPubKey vch;
+            creator.KeyStore().GetPubKey(keyID, vch);
+            scriptSigRet << ToByteVector(vch);
+        }
+        return true;
     }
     return false;
 }
@@ -250,6 +262,10 @@ static CScript CombineSignatures(const CScript& scriptPubKey, const BaseSignatur
         }
     case TX_MULTISIG:
         return CombineMultisig(scriptPubKey, checker, vSolutions, sigs1, sigs2);
+    case TX_DEPLOYMENT:
+        if (sigs1.empty() || sigs1[0].empty())
+            return PushAll(sigs2);
+        return PushAll(sigs1);
     }
 
     return CScript();

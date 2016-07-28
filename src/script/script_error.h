@@ -12,7 +12,6 @@ typedef enum ScriptError_t
     SCRIPT_ERR_UNKNOWN_ERROR,
     SCRIPT_ERR_EVAL_FALSE,
     SCRIPT_ERR_OP_RETURN,
-    SCRIPT_ERR_OP_EXECVM,
 
     /* Max sizes */
     SCRIPT_ERR_SCRIPT_SIZE,
@@ -53,6 +52,10 @@ typedef enum ScriptError_t
     /* softfork safeness */
     SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS,
 
+    /* byte code related */
+    SCRIPT_ERR_COMPILE_BAD_SIZE,
+    SCRIPT_ERR_OP_EXEC,
+    
     SCRIPT_ERR_ERROR_COUNT
 } ScriptError;
 

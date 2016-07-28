@@ -50,6 +50,7 @@ enum txnouttype
     TX_PUBKEYHASH,
     TX_SCRIPTHASH,
     TX_MULTISIG,
+    TX_DEPLOYMENT,
     TX_NULL_DATA,
 };
 
@@ -77,5 +78,6 @@ bool ExtractDestinations(const CScript& scriptPubKey, txnouttype& typeRet, std::
 CScript GetScriptForDestination(const CTxDestination& dest);
 CScript GetScriptForRawPubKey(const CPubKey& pubkey);
 CScript GetScriptForMultisig(int nRequired, const std::vector<CPubKey>& keys);
+CScript GetScriptForDeployment(const CTxDestination& dest, const std::vector<unsigned char>& bc, int64_t ver = 0);
 
 #endif // BITCOIN_SCRIPT_STANDARD_H
