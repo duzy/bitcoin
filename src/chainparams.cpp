@@ -15,6 +15,7 @@
 #include <boost/assign/list_of.hpp>
 
 #include "chainparamsseeds.h"
+#include "arith_uint256.h"
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
@@ -75,7 +76,7 @@ public:
         consensus.BIP34Hash = uint256S(""); // TODO: BIP34 for ExtBit?
         consensus.BIP65Height = 0;          // TODO: BIP65 for ExtBit?
         consensus.BIP66Height = 0;          // TODO: BIP66 for ExtBit?
-        consensus.powLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" /*"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"*/);
+        consensus.powLimit = uint256S("000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" /*"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"*/);
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -112,9 +113,9 @@ public:
         nDefaultPort = 9333;
         nPruneAfterHeight = 100000;
 
-        genesis = CreateGenesisBlock(1473534281, 332897668, 0x1d00ffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1477791515, 7101, 0x1f0fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x0000000064561238c36a67c56478b790137e3e773bfce73bef126aea61526833"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000f97a290c1272aec6f0cdbbfe60e73b8f7be4f1d88dd00105788b1da8d8755"));
         assert(genesis.hashMerkleRoot == uint256S("0x90fdd92a0845ade0a8da372f7c19266c9de4aee8c8e4cf0d7105961ed9f44e5c"));
 
         // TODO: vSeeds.push_back(CDNSSeedData(...))
@@ -135,8 +136,8 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            ( 0, uint256S("0x0000000064561238c36a67c56478b790137e3e773bfce73bef126aea61526833")),
-            1473534281, // * UNIX timestamp of last checkpoint block
+            ( 0, uint256S("0x000f97a290c1272aec6f0cdbbfe60e73b8f7be4f1d88dd00105788b1da8d8755")),
+            1477791515, // * UNIX timestamp of last checkpoint block
             1, // * total number of transactions between genesis and last checkpoint
                //   (the tx=... number in the SetBestChain debug.log lines)
             0  // * estimated number of transactions per day after checkpoint
@@ -157,7 +158,7 @@ public:
         consensus.BIP34Hash = uint256S(""); // TODO: BIP34 for ExtBit?
         consensus.BIP65Height = 0;          // TODO: BIP65 for ExtBit?
         consensus.BIP66Height = 0;          // TODO: BIP66 for ExtBit?
-        consensus.powLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" /*"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"*/);
+        consensus.powLimit = uint256S("000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" /*"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"*/);
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -189,9 +190,9 @@ public:
         nDefaultPort = 19333;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1473535632, 99343437, 0x1d00ffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1477792088, 2439, 0x1f0fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x000000007fb9db577fab3d1994fe622f34b419abb9b6ead1fc03edcc552757bc"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000458ce9dda124cbf0158dab7996e2071d6b90fcc2486b622947382ff45ae80"));
         assert(genesis.hashMerkleRoot == uint256S("0x90fdd92a0845ade0a8da372f7c19266c9de4aee8c8e4cf0d7105961ed9f44e5c"));
 
         vFixedSeeds.clear();
@@ -214,8 +215,8 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            ( 0, uint256S("000000007fb9db577fab3d1994fe622f34b419abb9b6ead1fc03edcc552757bc")),
-            1473535632,
+            ( 0, uint256S("0x00009947dc5bf1289dd222190ae19c87921c3d21396c9d84faf66043f3ef566e")),
+            1477791515,
             1,
             0
         };

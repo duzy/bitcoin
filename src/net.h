@@ -136,6 +136,12 @@ public:
 
     bool ForNode(NodeId id, std::function<bool(CNode* pnode)> func);
 
+    bool HasNodes() const
+    {
+        LOCK(cs_vNodes);
+        return !vNodes.empty();
+    };
+
     template<typename Callable>
     bool ForEachNodeContinueIf(Callable&& func)
     {
