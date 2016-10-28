@@ -75,7 +75,7 @@ public:
         consensus.BIP34Hash = uint256S(""); // TODO: BIP34 for ExtBit?
         consensus.BIP65Height = 0;          // TODO: BIP65 for ExtBit?
         consensus.BIP66Height = 0;          // TODO: BIP66 for ExtBit?
-        consensus.powLimit = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" /*"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"*/);
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -157,7 +157,7 @@ public:
         consensus.BIP34Hash = uint256S(""); // TODO: BIP34 for ExtBit?
         consensus.BIP65Height = 0;          // TODO: BIP65 for ExtBit?
         consensus.BIP66Height = 0;          // TODO: BIP66 for ExtBit?
-        consensus.powLimit = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" /*"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"*/);
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
