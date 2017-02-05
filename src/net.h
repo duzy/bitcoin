@@ -466,6 +466,15 @@ struct CombinerAll
     }
 };
 
+// Signals for app
+struct AppSignals
+{
+  boost::signals2::signal<bool (boost::thread_group&, CScheduler&)> PreInitMain;
+  boost::signals2::signal<void ()> StopParsing;
+};
+
+typedef void(*AppSignalsInitializer)(AppSignals&);
+
 // Signals for message handling
 struct CNodeSignals
 {
@@ -475,9 +484,8 @@ struct CNodeSignals
     boost::signals2::signal<void (NodeId, bool&)> FinalizeNode;
 };
 
-
+AppSignals &GetAppSignals(AppSignalsInitializer init = nullptr);
 CNodeSignals& GetNodeSignals();
-
 
 enum
 {

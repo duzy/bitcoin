@@ -80,6 +80,15 @@ limitedmap<uint256, int64_t> mapAlreadyAskedFor(MAX_INV_SZ);
 static CNodeSignals g_signals;
 CNodeSignals& GetNodeSignals() { return g_signals; }
 
+AppSignals &GetAppSignals(AppSignalsInitializer init)
+{
+  static AppSignals signals;
+  if (init != nullptr) {
+    init(signals);
+  }
+  return signals;
+}
+
 void CConnman::AddOneShot(const std::string& strDest)
 {
     LOCK(cs_vOneShots);

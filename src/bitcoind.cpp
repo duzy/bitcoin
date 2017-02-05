@@ -18,6 +18,7 @@
 #include "httpserver.h"
 #include "httprpc.h"
 #include "utilstrencodings.h"
+#include "net.h"
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/filesystem.hpp>
@@ -164,6 +165,7 @@ bool AppInit(int argc, char* argv[])
 #endif // HAVE_DECL_DAEMON
         }
 
+        GetAppSignals().PreInitMain(threadGroup, scheduler);
         fRet = AppInitMain(threadGroup, scheduler);
     }
     catch (const std::exception& e) {
@@ -181,6 +183,7 @@ bool AppInit(int argc, char* argv[])
     } else {
         WaitForShutdown(&threadGroup);
     }
+    GetAppSignals().StopParsing();
     Shutdown();
 
     return fRet;
