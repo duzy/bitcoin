@@ -240,6 +240,14 @@ public:
         }
         return ret;
     }
+
+    CAmount GetAmount() const {
+        CAmount ret(0);
+        BOOST_FOREACH(const CTxOut &out, vout) {
+            ret += out.nValue;
+        }
+        return ret;
+    }
 };
 
 class SaltedTxidHasher
