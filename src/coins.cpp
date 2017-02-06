@@ -128,7 +128,7 @@ CCoinsModifier CCoinsViewCache::ModifyCoins(const uint256 &txid) {
  * doesn't exist or is pruned in the current cache, we know it either doesn't
  * exist or is pruned in parent caches, which is the definition of FRESH.  The
  * exception to this is the two historical violations of BIP 30 in the chain,
- * both of which were coinbases.  We do not mark these fresh so we we can ensure
+ * both of which were coinbases.  We do not mark these fresh so we can ensure
  * that they will still be properly overwritten when spent.
  */
 CCoinsModifier CCoinsViewCache::ModifyNewCoins(const uint256 &txid, bool coinbase) {
