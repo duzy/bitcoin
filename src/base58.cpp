@@ -286,6 +286,33 @@ bool CBitcoinAddress::IsScript() const
     return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
 }
 
+bool ExtractAddress(const CScript& scriptPubKey, CBitcoinAddress& addressRet)
+{
+    CTxDestination dest;
+    if (ExtractDestination(scriptPubKey, dest)) {
+      addressRet.Set(dest);
+      return true;
+    }
+    return false;
+}
+
+CBitcoinAddress ExtractAddress(const CScript& scriptPubKey)
+{
+    CBitcoinAddress address;
+    ExtractAddress(scriptPubKey, address);
+    return address;
+}
+
+std::string ExtractAddressString(const CScript& scriptPubKey)
+{
+    std::string str;
+    CBitcoinAddress address;
+    if (ExtractAddress(scriptPubKey, address) && address.IsValid()) {
+        str = address.ToString();
+    }
+    return str;
+}
+
 void CBitcoinSecret::SetKey(const CKey& vchSecret)
 {
     assert(vchSecret.IsValid());

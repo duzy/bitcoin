@@ -167,4 +167,8 @@ public:
 typedef CBitcoinExtKeyBase<CExtKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_SECRET_KEY> CBitcoinExtKey;
 typedef CBitcoinExtKeyBase<CExtPubKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
 
+bool ExtractAddress(const CScript& scriptPubKey, CBitcoinAddress& addressRet);
+CBitcoinAddress ExtractAddress(const CScript& scriptPubKey);
+std::string ExtractAddressString(const CScript& scriptPubKey);
+
 #endif // BITCOIN_BASE58_H
