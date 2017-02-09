@@ -66,7 +66,7 @@ CConditionVariable cvBlockChange;
 int nScriptCheckThreads = 0;
 std::atomic_bool fImporting(false);
 bool fReindex = false;
-bool fTxIndex = false;
+bool fTxIndex = DEFAULT_TXINDEX;
 bool fHavePruned = false;
 bool fPruneMode = false;
 bool fIsBareMultisigStd = DEFAULT_PERMIT_BAREMULTISIG;
@@ -1063,6 +1063,21 @@ bool GetTransaction(const uint256 &hash, CTransactionRef &txOut, const Consensus
     }
 
     return false;
+}
+
+CTransactionRef GetTransaction(const uint256 &hash, uint256 &hashBlock, bool fAllowSlow)
+{
+  CTransactionRef txRef;
+  if (!GetTransaction(hash, txRef, Params().GetConsensus(), hashBlock, fAllowSlow)) {
+    // no such tx found
+  }
+  return txRef;
+}
+
+CTransactionRef GetTransaction(const uint256 &hash, bool fAllowSlow)
+{
+  uint256 hashBlock;
+  return GetTransaction(hash, hashBlock, fAllowSlow);
 }
 
 
@@ -3779,7 +3794,7 @@ bool InitBlockIndex(const CChainParams& chainparams)
     // Use the provided setting for -txindex in the new database
     fTxIndex = GetBoolArg("-txindex", DEFAULT_TXINDEX);
     pblocktree->WriteFlag("txindex", fTxIndex);
-    LogPrintf("Initializing databases...\n");
+    LogPrintf("Initializing databases (txindex=%i)...\n", int(fTxIndex));
 
     // Only add the genesis block if not reindexing (in which case we reuse the one already on disk)
     if (!fReindex) {
