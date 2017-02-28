@@ -280,6 +280,7 @@ CTransactionRef GetTransaction(const uint256 &hash, bool fAllowSlow = false);
 /** Find the best known block, and make it the tip of the block chain */
 bool ActivateBestChain(CValidationState& state, const CChainParams& chainparams, std::shared_ptr<const CBlock> pblock = std::shared_ptr<const CBlock>());
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams);
+bool GetBlockTransactions(CBlockIndex *block, CBlockHeader &header, std::vector<CTransactionRef> &vtxs);
 std::vector<CBlockIndex*> GetBlockIndexes(int nHeight, int nNum);
 int GetActiveChainHeight();
 

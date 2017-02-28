@@ -1158,6 +1158,21 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     return nSubsidy;
 }
 
+bool GetBlockTransactions(CBlockIndex *index, CBlockHeader &header, std::vector<CTransactionRef> &out)
+{
+    CBlock block;
+    header.SetNull();
+    out.clear();
+    if (index != nullptr) {
+        if (ReadBlockFromDisk(block, index->GetBlockPos(), Params().GetConsensus())) {
+            header = block;
+            out = block.vtx;
+            return true;
+        }
+    }
+    return false;
+}
+
 std::vector<CBlockIndex*> GetBlockIndexes(int nHeight, int nNum)
 {
     LOCK(cs_main);
