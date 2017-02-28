@@ -1158,6 +1158,25 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     return nSubsidy;
 }
 
+std::vector<CBlockIndex*> GetBlockIndexes(int nHeight, int nNum)
+{
+    LOCK(cs_main);
+    std::vector<CBlockIndex*> vIndexes;
+    const auto nActiveHeight = chainActive.Height();
+    if (0 < nActiveHeight && 0 < nHeight) {
+        for (; nHeight <= nActiveHeight && 0 < nNum; --nNum) {
+            vIndexes.push_back(chainActive[nHeight++]);
+        }
+    }
+    return vIndexes;
+}
+
+int GetActiveChainHeight()
+{
+    LOCK(cs_main);
+    return chainActive.Height();
+}
+
 bool IsInitialBlockDownload()
 {
     const CChainParams& chainParams = Params();
