@@ -1178,7 +1178,7 @@ std::vector<CBlockIndex*> GetBlockIndexes(int nHeight, int nNum)
     LOCK(cs_main);
     std::vector<CBlockIndex*> vIndexes;
     const auto nActiveHeight = chainActive.Height();
-    if (0 < nActiveHeight && 0 < nHeight) {
+    if (0 < nActiveHeight && 0 <= nHeight) {
         for (; nHeight <= nActiveHeight && 0 < nNum; --nNum) {
             vIndexes.push_back(chainActive[nHeight++]);
         }
