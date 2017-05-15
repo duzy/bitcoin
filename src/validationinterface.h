@@ -9,7 +9,9 @@
 #include <boost/signals2/signal.hpp>
 #include <boost/shared_ptr.hpp>
 #include <memory>
+#include <vector>
 
+class CAddress;
 class CBlock;
 class CBlockIndex;
 struct CBlockLocator;
@@ -74,6 +76,12 @@ struct CMainSignals {
     boost::signals2::signal<void (const CBlockIndex *, const std::shared_ptr<const CBlock>&)> NewPoWValidBlock;
 };
 
+struct CNetSignals {
+  /** new network addresses */
+  boost::signals2::signal<void (const CAddress &from, std::vector<CAddress> &addresses)> NewAddresses;
+};
+
 CMainSignals& GetMainSignals();
+CNetSignals& GetNetSignals();
 
 #endif // BITCOIN_VALIDATIONINTERFACE_H

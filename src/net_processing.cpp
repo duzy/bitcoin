@@ -1418,6 +1418,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                 vAddrOk.push_back(addr);
         }
         connman.AddNewAddresses(vAddrOk, pfrom->addr, 2 * 60 * 60);
+        GetNetSignals().NewAddresses(pfrom->addr, vAddrOk);
         if (vAddr.size() < 1000)
             pfrom->fGetAddr = false;
         if (pfrom->fOneShot)
