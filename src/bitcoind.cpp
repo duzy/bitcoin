@@ -58,6 +58,11 @@ void WaitForShutdown(boost::thread_group* threadGroup)
     }
 }
 
+static void EditParameters(std::map<std::string, std::vector<std::string> > &multi)
+{
+  GetAppSignals().EditParameters(multi);
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Start
@@ -73,7 +78,7 @@ bool AppInit(int argc, char* argv[])
     // Parameters
     //
     // If Qt is used, parameters/bitcoin.conf are parsed in qt/bitcoin.cpp's main()
-    ParseParameters(argc, argv);
+    ParseParameters(argc, argv, &EditParameters);
 
     // Process help and version before taking care about datadir
     if (IsArgSet("-?") || IsArgSet("-h") ||  IsArgSet("-help") || IsArgSet("-version"))
@@ -165,7 +170,11 @@ bool AppInit(int argc, char* argv[])
 #endif // HAVE_DECL_DAEMON
         }
 
-        GetAppSignals().PreInitMain(threadGroup, scheduler);
+        if (!GetAppSignals().PreInitMain(threadGroup, scheduler)) {
+          fprintf(stderr, "Error: pre-initialization failed\n");
+          return false;
+        }
+
         fRet = AppInitMain(threadGroup, scheduler);
     }
     catch (const std::exception& e) {

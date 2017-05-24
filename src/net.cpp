@@ -394,6 +394,7 @@ CNode* CConnman::ConnectNode(CAddress addrConnect, const char *pszDest, bool fCo
         }
 
         addrman.Attempt(addrConnect, fCountFailure);
+        GetNetSignals().Changed(addrConnect, (int) AddrChangeAction::Connected, GetAdjustedTime());
 
         // Add node
         NodeId id = GetNewNodeId();
@@ -522,8 +523,15 @@ void CConnman::Ban(const CSubNet& subNet, const BanReason &banReason, int64_t ba
     {
         LOCK(cs_vNodes);
         BOOST_FOREACH(CNode* pnode, vNodes) {
-            if (subNet.Match((CNetAddr)pnode->addr))
-                pnode->fDisconnect = true;
+          if (subNet.Match((CNetAddr)pnode->addr)) {
+            pnode->fDisconnect = true;
+            int code = (int) AddrChangeAction::Banned;
+            if (banReason == BanReasonNodeMisbehaving)
+              code = (int) AddrChangeAction::GotWrong;
+            if (banReason == BanReasonManuallyAdded)
+              code = (int) AddrChangeAction::Disabled;
+            GetNetSignals().Changed(pnode->addr, code, GetAdjustedTime());
+          }
         }
     }
     if(banReason == BanReasonManuallyAdded)
@@ -1070,6 +1078,8 @@ void CConnman::ThreadSocketHandler()
                     // close socket and cleanup
                     pnode->CloseSocketDisconnect();
 
+                    GetNetSignals().Changed(pnode->addr, (int) AddrChangeAction::Disconnected, GetAdjustedTime());
+                    
                     // hold in disconnected pool until all refs are released
                     pnode->Release();
                     vNodesDisconnected.push_back(pnode);

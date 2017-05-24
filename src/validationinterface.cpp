@@ -6,16 +6,10 @@
 #include "validationinterface.h"
 
 static CMainSignals g_signals;
-static CNetSignals g_net_signals;
 
 CMainSignals& GetMainSignals()
 {
     return g_signals;
-}
-
-CNetSignals& GetNetSignals()
-{
-    return g_net_signals;
 }
 
 void RegisterValidationInterface(CValidationInterface* pwalletIn) {

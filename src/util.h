@@ -91,7 +91,7 @@ bool error(const char* fmt, const Args&... args)
 }
 
 void PrintExceptionContinue(const std::exception *pex, const char* pszThread);
-void ParseParameters(int argc, const char*const argv[]);
+void ParseParameters(int argc, const char*const argv[], std::function<void(std::map<std::string, std::vector<std::string> >&)> editor = nullptr);
 void FileCommit(FILE *file);
 bool TruncateFile(FILE *file, unsigned int length);
 int RaiseFileDescriptorLimit(int nMinFD);

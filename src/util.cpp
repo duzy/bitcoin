@@ -345,7 +345,7 @@ static void InterpretNegativeSetting(std::string& strKey, std::string& strValue)
     }
 }
 
-void ParseParameters(int argc, const char* const argv[])
+void ParseParameters(int argc, const char* const argv[], std::function<void(std::map<std::string, std::vector<std::string> >&)> editor)
 {
     LOCK(cs_args);
     mapArgs.clear();
@@ -378,6 +378,15 @@ void ParseParameters(int argc, const char* const argv[])
 
         mapArgs[str] = strValue;
         _mapMultiArgs[str].push_back(strValue);
+    }
+
+    if (editor) {
+      editor(_mapMultiArgs);
+      for (auto const &v : _mapMultiArgs) {
+        if (!v.second.empty()) {
+          mapArgs[v.first] = v.second.back();
+        }
+      }
     }
 }
 

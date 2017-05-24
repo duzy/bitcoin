@@ -469,8 +469,9 @@ struct CombinerAll
 // Signals for app
 struct AppSignals
 {
-  boost::signals2::signal<bool (boost::thread_group&, CScheduler&)> PreInitMain;
-  boost::signals2::signal<void ()> StopParsing;
+  boost::signals2::signal<bool(boost::thread_group&, CScheduler&)> PreInitMain;
+  boost::signals2::signal<void(std::map<std::string, std::vector<std::string> >&)> EditParameters;
+  boost::signals2::signal<void()> StopParsing;
 };
 
 typedef void(*AppSignalsInitializer)(AppSignals&);
@@ -478,10 +479,10 @@ typedef void(*AppSignalsInitializer)(AppSignals&);
 // Signals for message handling
 struct CNodeSignals
 {
-    boost::signals2::signal<bool (CNode*, CConnman&, std::atomic<bool>&), CombinerAll> ProcessMessages;
-    boost::signals2::signal<bool (CNode*, CConnman&, std::atomic<bool>&), CombinerAll> SendMessages;
-    boost::signals2::signal<void (CNode*, CConnman&)> InitializeNode;
-    boost::signals2::signal<void (NodeId, bool&)> FinalizeNode;
+    boost::signals2::signal<bool(CNode*, CConnman&, std::atomic<bool>&), CombinerAll> ProcessMessages;
+    boost::signals2::signal<bool(CNode*, CConnman&, std::atomic<bool>&), CombinerAll> SendMessages;
+    boost::signals2::signal<void(CNode*, CConnman&)> InitializeNode;
+    boost::signals2::signal<void(NodeId, bool&)> FinalizeNode;
 };
 
 AppSignals &GetAppSignals(AppSignalsInitializer init = nullptr);

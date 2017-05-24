@@ -541,6 +541,28 @@ bool CService::GetSockAddr(struct sockaddr* paddr, socklen_t *addrlen) const
     return false;
 }
 
+bool CService::GetNameInfo(std::string &host, std::string &serv) const
+{
+  struct sockaddr_storage sockaddr;
+  socklen_t addrlen = sizeof(sockaddr);
+  if (GetSockAddr((struct sockaddr*)&sockaddr, &addrlen)) {
+    char czHost[1025] = "";
+    char czServ[1025] = "";
+    int res = 0;
+    for (auto i = 0; i < 3/* gives several tries */; ++i) {
+      res = getnameinfo((struct sockaddr*)&sockaddr, addrlen, czHost, sizeof(czHost), czServ, sizeof(czServ), 0);
+      if (res == 0) {
+        host.assign(czHost);
+        serv.assign(czServ);
+        return true;
+      }
+      if (res != EAI_AGAIN) break;
+      //std::clog << "getnameinfo: " << ToString() << " (again)" << std::endl;
+    }
+  }
+  return false;
+}
+
 std::vector<unsigned char> CService::GetKey() const
 {
      std::vector<unsigned char> vKey;

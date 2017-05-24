@@ -143,6 +143,7 @@ class CService : public CNetAddr
         void Init();
         void SetPort(unsigned short portIn);
         unsigned short GetPort() const;
+        bool GetNameInfo(std::string &host, std::string &serv) const;
         bool GetSockAddr(struct sockaddr* paddr, socklen_t *addrlen) const;
         bool SetSockAddr(const struct sockaddr* paddr);
         friend bool operator==(const CService& a, const CService& b);
