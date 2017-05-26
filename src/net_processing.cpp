@@ -1106,6 +1106,7 @@ void static ProcessGetData(CNode* pfrom, const Consensus::Params& consensusParam
 
             // Track requests for our stuff.
             GetMainSignals().Inventory(inv.hash);
+            GetNetSignals().Incoming(pfrom->addr, inv.type, inv.hash);
 
             if (inv.type == MSG_BLOCK || inv.type == MSG_FILTERED_BLOCK || inv.type == MSG_CMPCT_BLOCK || inv.type == MSG_WITNESS_BLOCK)
                 break;
@@ -1506,7 +1507,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
             // Track requests for our stuff
             GetMainSignals().Inventory(inv.hash);
-            GetNetSignals().Incoming(pfrom->addr, inv.type, inv.hash, !fAlreadyHave);
+            GetNetSignals().Incoming(pfrom->addr, inv.type, inv.hash);
         }
 
         if (!vToFetch.empty())

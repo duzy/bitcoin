@@ -26,7 +26,7 @@ enum class AddrChangeAction : int {
 struct CNetSignals {
   /** new network addresses */
   boost::signals2::signal<void (const CAddress &from, const std::vector<CAddress> &addresses)> Addresses;
-  boost::signals2::signal<void (const CAddress &from, int type, const uint256 &hash, bool fIsNew)> Incoming;
+  boost::signals2::signal<void (const CAddress &from, int type, const uint256 &hash)> Incoming;
   boost::signals2::signal<void (const CAddress &from, int action, int64_t nTime)> Changed;
 };
 
