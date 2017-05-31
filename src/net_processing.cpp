@@ -1316,7 +1316,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         pfrom->nTimeOffset = nTimeOffset;
         AddTimeData(pfrom->addr, nTimeOffset);
 
-        GetNetSignals().Changed(pfrom->addr, AddrChangeAction::Connected, GetTime());
+        GetNetSignals().Changed(pfrom->addr, int(AddrChangeAction::Connected), GetTime());
 
         // Feeler connections exist only to verify if address is online.
         if (pfrom->fFeeler) {
