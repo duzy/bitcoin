@@ -21,6 +21,7 @@
 #include "net.h"
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/test/execution_monitor.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
 
@@ -198,7 +199,7 @@ bool AppInit(int argc, char* argv[])
     return fRet;
 }
 
-int main(int argc, char* argv[])
+static int start(int argc, char* argv[])
 {
     SetupEnvironment();
 
@@ -207,3 +208,28 @@ int main(int argc, char* argv[])
 
     return (AppInit(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE);
 }
+
+int main(int argc, char* argv[])
+{
+  boost::execution_monitor em;
+  try {
+    return em.execute(std::bind(start, argc, argv));
+  } catch (const boost::execution_exception &ee) {
+    auto const &es(ee.what());
+    auto const &s(std::string(es.begin(), es.end()));
+    fprintf(stderr, "execution_exception: %s\n", s.c_str());
+    LogPrintf("execution_exception: %s\n", s);
+  } catch (const boost::execution_aborted &ea) {
+    fprintf(stderr, "execution_aborted\n");
+    LogPrintf("execution_aborted\n");
+  } catch (const boost::system_error &se) {
+    const long n = se.p_errno;
+    fprintf(stderr, "system_error: %ld\n", n);
+    LogPrintf("system_error: %ld\n", n);
+  }
+  return EXIT_FAILURE;
+}
+
+#define BOOST_TEST_SOURCE
+#include <boost/test/impl/execution_monitor.ipp>
+#include <boost/test/impl/debug.ipp>

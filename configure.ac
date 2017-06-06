@@ -608,7 +608,7 @@ AX_BOOST_FILESYSTEM
 AX_BOOST_PROGRAM_OPTIONS
 AX_BOOST_THREAD
 AX_BOOST_CHRONO
-
+AX_BOOST_TEST_EXEC_MONITOR
 
 if test x$use_reduce_exports = xyes; then
   AC_MSG_CHECKING([for working boost reduced exports])
@@ -671,7 +671,8 @@ fi
 if test x$use_boost = xyes; then
 
 BOOST_LIBS="$BOOST_LDFLAGS $BOOST_SYSTEM_LIB $BOOST_FILESYSTEM_LIB $BOOST_PROGRAM_OPTIONS_LIB $BOOST_THREAD_LIB $BOOST_CHRONO_LIB"
-
+#BOOST_LIBS="$BOOST_LIBS $BOOST_TEST_EXEC_MONITOR_LIB"
+#ls $BOOSTLIBDIR/libboost_*
 
 dnl If boost (prior to 1.57) was built without c++11, it emulated scoped enums
 dnl using c++98 constructs. Unfortunately, this implementation detail leaked into
@@ -1165,4 +1166,8 @@ echo "  CPPFLAGS      = $CPPFLAGS"
 echo "  CXX           = $CXX"
 echo "  CXXFLAGS      = $CXXFLAGS"
 echo "  LDFLAGS       = $LDFLAGS"
+echo
+echo "  BOOST_CPPFLAGS = $BOOST_CPPFLAGS"
+echo "  BOOST_LDFLAGS = $BOOST_LDFLAGS"
+echo "  BOOST_LIBS = $BOOST_LIBS"
 echo 
