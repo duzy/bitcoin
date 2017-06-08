@@ -1,0 +1,28 @@
+project bitcoin_crypto
+
+import (
+    'tools/gcc/c++'
+)
+
+files '*.o' '*.a' '*.cpp' '*.h'
+
+compile_flags += -g -ggdb
+compile_flags += -DHAVE_CONFIG_H
+compile_flags += -I"$(dir $/)" -I"$(dir $/)/config"
+compile = $(c++.compiler) $(compile_flags)
+
+libbitcoin_crypto.a:[(compare) (stderr) (shell)]: \
+  aes.o hmac_sha256.o hmac_sha512.o \
+  ripemd160.o sha1.o sha256.o sha512.o
+	$(archive) $@ $^
+
+%.o:[(compare) (stderr) (shell)]: %.cpp
+	$(compile) $^ -o $@
+
+use:
+	compile_flags += -I"$//include"
+	link_flags += -L"$/"
+	libs += -lbitcoin_crypto
+
+clean:[(stderr) (stdout) (shell)]
+	@echo "clean: $." && rm -vf *.la *.a lib/*.o lib/*.lo .libs/*

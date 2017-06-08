@@ -1,0 +1,32 @@
+project core
+
+import './src'
+
+libs := \
+  -lbitcoin_server \
+  -lbitcoin_wallet \
+  \
+  -lbitcoin_common \
+  -lbitcoin_util \
+  -lbitcoin_consensus \
+  \
+  -lcrypto \
+  -lminiupnpc \
+  -levent_pthreads -levent \
+  -ldb_cxx \
+  \
+  -lboost_filesystem \
+  -lboost_program_options \
+  -lboost_system \
+  -lboost_thread \
+  -lboost_chrono \
+  -lpthread
+
+debug: src.archives src.objects
+clean: src.clean
+
+use:
+	compile_flags += -I"$//src"
+	link_flags += -L"$//src"
+	libs += "$//src/bitcoind-bitcoind.o"
+	libs += $(libs)

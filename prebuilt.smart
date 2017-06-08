@@ -1,0 +1,49 @@
+project core
+
+files '*.a' '*.o'
+
+link_flags := \
+    -L"$//src" \
+    -L"$//src/secp256k1/.libs" \
+    -L"$//src/leveldb" \
+    -L"$//src/univalue" \
+    -L"$//src/univalue/.libs" \
+    -L"$//src/crypto"
+
+libs := \
+  -lbitcoin_server \
+  -lbitcoin_wallet \
+  \
+  -lbitcoin_common \
+  -lbitcoin_util \
+  -lbitcoin_consensus \
+  -lbitcoin_crypto \
+  \
+  -lcrypto \
+  -lleveldb -lmemenv \
+  -lminiupnpc \
+  -lunivalue \
+  -levent_pthreads -levent \
+  -ldb_cxx \
+  -lsecp256k1 \
+  \
+  -lboost_filesystem \
+  -lboost_program_options \
+  -lboost_system \
+  -lboost_thread \
+  -lboost_chrono \
+  -lpthread
+
+lib: \
+  src/libbitcoin_common.a \
+  src/libbitcoin_consensus.a \
+  src/libbitcoin_server.a \
+  src/libbitcoin_util.a \
+  src/libbitcoin_wallet.a \
+  src/bitcoind-bitcoind.o
+
+use:
+	compile_flags += -I"$//src"
+	link_flags += $(link_flags)
+	libs += "$//src/bitcoind-bitcoind.o"
+	libs += $(libs)

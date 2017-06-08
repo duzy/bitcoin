@@ -1,0 +1,67 @@
+project leveldb
+
+import (
+    'tools/gcc/c++'
+)
+
+files '*.cc' '*.o' '*.a'
+
+compile_flags += -g -ggdb
+compile_flags += -DLEVELDB_PLATFORM_POSIX
+compile_flags += -I"$/" -I"$//include"
+compile = $(c++.compiler) $(compile_flags)
+
+libleveldb.a:[(compare) (stderr) (shell)]: \
+  db/builder.o \
+  db/c.o \
+  db/dbformat.o \
+  db/db_impl.o \
+  db/db_iter.o \
+  db/dumpfile.o \
+  db/filename.o \
+  db/log_reader.o \
+  db/log_writer.o \
+  db/memtable.o \
+  db/repair.o \
+  db/table_cache.o \
+  db/version_edit.o \
+  db/version_set.o \
+  db/write_batch.o \
+  table/block_builder.o \
+  table/block.o \
+  table/filter_block.o \
+  table/format.o \
+  table/iterator.o \
+  table/merger.o \
+  table/table_builder.o \
+  table/table.o \
+  table/two_level_iterator.o \
+  util/arena.o \
+  util/bloom.o \
+  util/cache.o \
+  util/coding.o \
+  util/comparator.o \
+  util/crc32c.o \
+  util/env.o \
+  util/env_posix.o \
+  util/filter_policy.o \
+  util/hash.o \
+  util/histogram.o \
+  util/logging.o \
+  util/options.o \
+  util/status.o \
+  port/port_posix.o
+	$(archive) $@ $^
+
+%.o:[(compare) (stderr) (shell)]: %.cc
+	$(compile) $^ -o $@
+
+clean:[(stderr) (stdout) (shell)]
+	@echo "clean: $." && rm -vf *.a \
+	db/*.o port/*.o table/*.o util/*.o
+
+use:
+	compile_flags += -I"$//include"
+	compile_flags += -I"$//helpers/memenv"
+	link_flags += -L"$/"
+	libs += -lleveldb

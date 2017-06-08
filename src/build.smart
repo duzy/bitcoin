@@ -1,0 +1,105 @@
+project src
+
+import (
+    'tools/gcc/c++'
+    './crypto'
+    './univalue'
+    './secp256k1'
+    './leveldb'
+    './leveldb/helpers/memenv'
+)
+
+files '*.h' '*.cpp' '*.o' '*.a'
+
+compile_flags += -g -ggdb
+compile_flags += -DHAVE_CONFIG_H
+compile_flags += -I"$/" -I"$//config"
+compile = $(c++.compiler) $(compile_flags)
+
+archives: use.* \
+  libbitcoin_common.a \
+  libbitcoin_consensus.a \
+  libbitcoin_server.a \
+  libbitcoin_util.a \
+  libbitcoin_wallet.a
+
+libbitcoin_common.a:[(compare) (stderr) (shell)]: \
+  amount.o base58.o chainparams.o coins.o compressor.o \
+  core_read.o core_write.o key.o keystore.o netaddress.o \
+  netbase.o protocol.o scheduler.o \
+  script/sign.o script/standard.o \
+  warnings.o
+	$(archive) $@ $^
+
+libbitcoin_consensus.a:[(compare) (stderr) (shell)]: \
+  arith_uint256.o consensus/merkle.o hash.o primitives/block.o \
+  primitives/transaction.o pubkey.o \
+  script/bitcoinconsensus.o \
+  script/interpreter.o \
+  script/script.o \
+  script/script_error.o \
+  uint256.o \
+  utilstrencodings.o
+	$(archive) $@ $^
+
+libbitcoin_server.a:[(compare) (stderr) (shell)]: \
+  addrman.o addrdb.o bloom.o blockencodings.o chain.o \
+  checkpoints.o httprpc.o httpserver.o \
+  init.o dbwrapper.o merkleblock.o \
+  miner.o net.o net_processing.o \
+  noui.o policy/fees.o policy/policy.o \
+  pow.o rest.o \
+  rpc/blockchain.o \
+  rpc/mining.o \
+  rpc/misc.o \
+  rpc/net.o \
+  rpc/rawtransaction.o \
+  rpc/server.o \
+  script/sigcache.o \
+  script/ismine.o \
+  timedata.o torcontrol.o txdb.o txmempool.o \
+  ui_interface.o validation.o validationinterface.o \
+  versionbits.o
+	$(archive) $@ $^
+
+libbitcoin_util.a:[(compare) (stderr) (shell)]: \
+  support/lockedpool.o \
+  chainparamsbase.o \
+  clientversion.o \
+  compat/glibc_sanity.o \
+  compat/glibcxx_sanity.o \
+  compat/strnlen.o \
+  random.o \
+  rpc/protocol.o \
+  support/cleanse.o \
+  sync.o \
+  threadinterrupt.o \
+  util.o \
+  utilmoneystr.o \
+  utilstrencodings.o \
+  utiltime.o
+	$(archive) $@ $^
+
+libbitcoin_wallet.a:[(compare) (stderr) (shell)]: \
+  wallet/crypter.o \
+  wallet/db.o \
+  wallet/rpcdump.o \
+  wallet/rpcwallet.o \
+  wallet/wallet.o \
+  wallet/walletdb.o \
+  policy/rbf.o
+	$(archive) $@ $^
+
+objects:[(compare) (stderr) (shell)]: bitcoind.o
+	@cp -vf $< bitcoind-bitcoind.o
+
+%.o:[(compare) (stderr) (shell)]: %.cpp
+	$(compile) $< -o $@
+
+clean:[(stderr) (stdout) (shell)]: \
+  bitcoin_crypto.clean \
+  univalue.clean \
+  secp256k1.clean \
+  leveldb.clean \
+  memenv.clean
+	@echo "clean: $." && rm -vf *.o *.a *.lo *.la

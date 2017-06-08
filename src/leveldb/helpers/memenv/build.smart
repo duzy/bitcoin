@@ -1,0 +1,26 @@
+project memenv
+
+import (
+    'tools/gcc/c++'
+)
+
+files '*.cc' '*.o' '*.a'
+
+compile_flags += -g -ggdb
+compile_flags += -DLEVELDB_PLATFORM_POSIX
+compile_flags += -I"$(dirdir $/)" -I"$(dirdir $/)/include"
+compile = $(c++.compiler) $(compile_flags)
+
+libmemenv.a:[(compare) (stderr) (shell)]: memenv.o
+	$(archive) $@ $^
+
+%.o:[(compare) (stderr) (shell)]: %.cc
+	$(compile) $^ -o $@
+
+clean:[(stderr) (stdout) (shell)]
+	@echo "clean: $." && rm -vf *.a *.o
+
+use:
+	compile_flags += -I"$/"
+	link_flags += -L"$/"
+	libs += -lmemenv
