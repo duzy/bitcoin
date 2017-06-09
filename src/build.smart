@@ -102,4 +102,6 @@ clean:[(stderr) (stdout) (shell)]: \
   secp256k1.clean \
   leveldb.clean \
   memenv.clean
-	@echo "clean: $." && rm -vf *.o *.a *.lo *.la
+	@echo "clean: $." && rm -vf *.o *.a *.lo *.la \
+	script/*.o consensus/*.o primitives/.o policy/.o \
+	rpc/*.o support/*.o wallet/*.o
