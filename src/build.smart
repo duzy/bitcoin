@@ -13,6 +13,7 @@ files '*.h' '*.cpp' '*.o' '*.a'
 
 compile_flags += -g -ggdb
 compile_flags += -DHAVE_CONFIG_H
+compile_flags += -DBOOST_NO_CXX11_SCOPED_ENUMS
 compile_flags += -I"$/" -I"$//config"
 compile = $(c++.compiler) $(compile_flags)
 
