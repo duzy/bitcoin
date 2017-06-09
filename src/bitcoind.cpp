@@ -211,6 +211,7 @@ static int start(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+#if 0
   boost::execution_monitor em;
   try {
     return em.execute(std::bind(start, argc, argv));
@@ -228,6 +229,9 @@ int main(int argc, char* argv[])
     LogPrintf("system error: %ld\n", n);
   }
   return EXIT_FAILURE;
+#else
+  return start(argc, argv);
+#endif
 }
 
 #define BOOST_TEST_SOURCE
