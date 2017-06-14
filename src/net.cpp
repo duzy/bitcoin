@@ -1151,9 +1151,17 @@ void CConnman::ThreadSocketHandler()
             {
                 if (pnode->hSocket == INVALID_SOCKET)
                     continue;
-                FD_SET(pnode->hSocket, &fdsetError);
-                hSocketMax = std::max(hSocketMax, pnode->hSocket);
-                have_fds = true;
+
+                // The vNodes should be all connected, but actually some thread could
+                // disconnect a node (and the socket is invalid) during this loop.
+                if (pnode->fDisconnect)
+                    continue;
+                
+                if (!pnode->fDisconnect) {
+                  FD_SET(pnode->hSocket, &fdsetError);
+                  hSocketMax = std::max(hSocketMax, pnode->hSocket);
+                  have_fds = true;
+                }
 
                 // Implement the following logic:
                 // * If there is data to send, select() for sending data. As this only
@@ -1165,15 +1173,15 @@ void CConnman::ThreadSocketHandler()
                 //   receiving data.
                 // * Hand off all complete messages to the processor, to be handled without
                 //   blocking here.
-                {
+                if (!pnode->fDisconnect) {
                     LOCK(pnode->cs_vSend);
-                    if (!pnode->vSendMsg.empty()) {
+                    if (!pnode->fDisconnect && !pnode->vSendMsg.empty()) {
                         FD_SET(pnode->hSocket, &fdsetSend);
                         continue;
                     }
                 }
-                {
-                    if (!pnode->fPauseRecv)
+                if (!pnode->fDisconnect) {
+                    if (!pnode->fDisconnect && !pnode->fPauseRecv)
                         FD_SET(pnode->hSocket, &fdsetRecv);
                 }
             }
