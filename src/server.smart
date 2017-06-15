@@ -1,0 +1,23 @@
+project src
+
+files '*.h' '*.cpp' '*.o' '*.a'
+
+libbitcoin_server.a:[(compare) (stderr) (shell)]: \
+  addrman.o addrdb.o bloom.o blockencodings.o chain.o \
+  checkpoints.o httprpc.o httpserver.o \
+  init.o dbwrapper.o merkleblock.o \
+  miner.o net.o net_processing.o \
+  noui.o policy/fees.o policy/policy.o \
+  pow.o rest.o \
+  rpc/blockchain.o \
+  rpc/mining.o \
+  rpc/misc.o \
+  rpc/net.o \
+  rpc/rawtransaction.o \
+  rpc/server.o \
+  script/sigcache.o \
+  script/ismine.o \
+  timedata.o torcontrol.o txdb.o txmempool.o \
+  ui_interface.o validation.o validationinterface.o \
+  versionbits.o
+	$(archive) $@ $^
