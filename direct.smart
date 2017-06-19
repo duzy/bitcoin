@@ -2,27 +2,9 @@ project core
 
 import './src'
 
-libs := \
-  -lbitcoin_server \
-  -lbitcoin_wallet \
-  \
-  -lbitcoin_common \
-  -lbitcoin_util \
-  -lbitcoin_consensus \
-  \
-  -lcrypto \
-  -lminiupnpc \
-  -levent_pthreads -levent \
-  -ldb_cxx \
-  \
-  -lboost_filesystem \
-  -lboost_program_options \
-  -lboost_system \
-  -lboost_thread \
-  -lboost_chrono \
-  -lpthread
+libs = $(src.xlibs)
 
-debug: src.archives src.objects
+debug: src.archives src.objects src.programs
 clean: src.clean
 
 use:

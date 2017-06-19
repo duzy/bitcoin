@@ -1,0 +1,26 @@
+project src
+
+files '*.o' 'bitcoin-tx'
+
+txlibs = \
+  -lbitcoin_cli \
+  -lunivalue \
+  -lbitcoin_common \
+  -lbitcoin_util \
+  -lbitcoin_consensus \
+  -lbitcoin_crypto \
+  -lsecp256k1 \
+  \
+  -lcrypto \
+  \
+  -levent_pthreads -levent \
+  \
+  -lboost_filesystem \
+  -lboost_program_options \
+  -lboost_system \
+  -lboost_thread \
+  -lboost_chrono \
+  -lpthread
+
+bitcoin-tx:[(compare) (stderr) (shell)]: bitcoin-tx.o
+	$(link) -o $@ $^ -L. $(txlibs)

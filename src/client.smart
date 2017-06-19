@@ -1,0 +1,26 @@
+project src
+
+files '*.o' '*.a' 'bitcoin-cli'
+
+clilibs = \
+  -lbitcoin_cli \
+  -lunivalue \
+  -lbitcoin_util \
+  -lbitcoin_crypto \
+  \
+  -lcrypto \
+  \
+  -levent_pthreads -levent \
+  \
+  -lboost_filesystem \
+  -lboost_program_options \
+  -lboost_system \
+  -lboost_thread \
+  -lboost_chrono \
+  -lpthread
+
+libbitcoin_cli.a:[(compare) (stderr) (shell)]: rpc/client.o
+	$(archive) $@ $^
+
+bitcoin-cli:[(compare) (stderr) (shell)]: bitcoin-cli.o
+	$(link) -o $@ $^ -L. $(clilibs)

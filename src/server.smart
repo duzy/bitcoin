@@ -1,6 +1,33 @@
 project src
 
-files '*.h' '*.cpp' '*.o' '*.a'
+files '*.h' '*.cpp' '*.o' '*.a' 'bitcoind'
+
+xlibs = \
+  -lbitcoin_server \
+  -lbitcoin_wallet \
+  \
+  -lbitcoin_common \
+  -lbitcoin_util \
+  -lbitcoin_consensus \
+  \
+  -lcrypto \
+  -lminiupnpc \
+  -levent_pthreads -levent \
+  -ldb_cxx \
+  \
+  -lboost_filesystem \
+  -lboost_program_options \
+  -lboost_system \
+  -lboost_thread \
+  -lboost_chrono \
+  -lpthread
+
+svrlibs = $(xlibs) \
+  -lbitcoin_crypto \
+  -lunivalue \
+  -lsecp256k1 \
+  -lleveldb \
+  -lmemenv
 
 libbitcoin_server.a:[(compare) (stderr) (shell)]: \
   addrman.o addrdb.o bloom.o blockencodings.o chain.o \
@@ -21,3 +48,6 @@ libbitcoin_server.a:[(compare) (stderr) (shell)]: \
   ui_interface.o validation.o validationinterface.o \
   versionbits.o
 	$(archive) $@ $^
+
+bitcoind:[(compare) (stderr) (shell)]: bitcoind.o
+	$(link) -o $@ $^ -L. $(svrlibs)
