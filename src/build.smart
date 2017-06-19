@@ -6,7 +6,7 @@ import (
     './univalue'
     './secp256k1'
     './leveldb'
-    './leveldb/helpers/memenv'
+    './leveldb/helpers/memenv'  
 )
 
 files '*.h' '*.cpp' '*.o' '*.a'
@@ -17,12 +17,20 @@ compile_flags += -DBOOST_NO_CXX11_SCOPED_ENUMS
 compile_flags += -I"$/" -I"$//config"
 compile = $(c++.compiler) $(compile_flags)
 
+link = $(c++.linker) $(link_flags)
+
 archives: use.* \
   libbitcoin_common.a \
   libbitcoin_consensus.a \
   libbitcoin_server.a \
   libbitcoin_util.a \
-  libbitcoin_wallet.a
+  libbitcoin_wallet.a \
+  libbitcoin_cli.a
+
+programs: \
+  bitcoin-cli \
+  bitcoin-tx \
+  bitcoind
 
 objects:[(compare) (stderr) (shell)]: bitcoind.o
 	@cp -vf $< bitcoind-bitcoind.o
@@ -38,4 +46,5 @@ clean:[(stderr) (stdout) (shell)]: \
   memenv.clean
 	@echo "clean: $." && rm -vf *.o *.a *.lo *.la \
 	script/*.o consensus/*.o primitives/.o policy/.o \
-	rpc/*.o support/*.o wallet/*.o
+	rpc/*.o support/*.o wallet/*.o \
+	bitcoin-cli bitcoin-tx bitcoind
