@@ -6,7 +6,7 @@ import (
 
 files '*.o' '*.a' '*.cpp' '*.h'
 
-compile_flags += -g -ggdb
+#compile_flags += -g -ggdb
 compile_flags += -I"$//include"
 compile = $(c++.compiler) $(compile_flags)
 
@@ -23,4 +23,4 @@ use:
 	libs += -lunivalue
 
 clean:[(stderr) (stdout) (shell)]
-	@echo "clean: $." && rm -vf *.la *.a lib/*.o lib/*.lo .libs/*
+	@echo "clean: $." && rm -vf *.o *.lo *.la *.a .libs/* .deps/*

@@ -1,4 +1,4 @@
-project bitcoin_crypto
+project crypto
 
 import (
     'tools/gcc/c++'
@@ -6,7 +6,7 @@ import (
 
 files '*.o' '*.a' '*.cpp' '*.h'
 
-compile_flags += -g -ggdb
+#compile_flags += -g -ggdb
 compile_flags += -DHAVE_CONFIG_H
 compile_flags += -I"$(dir $/)" -I"$(dir $/)/config"
 compile = $(c++.compiler) $(compile_flags)
@@ -25,4 +25,4 @@ use:
 	libs += -lbitcoin_crypto
 
 clean:[(stderr) (stdout) (shell)]
-	@echo "clean: $." && rm -vf *.la *.a lib/*.o lib/*.lo .libs/*
+	@echo "clean: $." && rm -vf *.o *.lo *.la *.a .libs/*

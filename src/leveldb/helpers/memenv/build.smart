@@ -6,7 +6,7 @@ import (
 
 files '*.cc' '*.o' '*.a'
 
-compile_flags += -g -ggdb
+#compile_flags += -g -ggdb
 compile_flags += -DLEVELDB_PLATFORM_POSIX
 compile_flags += -I"$(dirdir $/)" -I"$(dirdir $/)/include"
 compile = $(c++.compiler) $(compile_flags)

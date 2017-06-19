@@ -6,7 +6,7 @@ import (
 
 files '*.o' '*.a' '*.c' '*.h'
 
-compile_flags += -g -ggdb
+#compile_flags += -g -ggdb
 compile_flags += -DHAVE_CONFIG_H
 compile_flags += -I"$/"
 compile = $(c.compiler) $(compile_flags)
