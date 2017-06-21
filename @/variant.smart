@@ -1,0 +1,4 @@
+project at
+
+variant = debug
+variant_cflags = -g -ggdb

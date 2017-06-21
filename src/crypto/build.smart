@@ -1,12 +1,13 @@
 project crypto
 
 import (
+    '../../@'
     'tools/gcc/c++'
 )
 
 files '*.o' '*.a' '*.cpp' '*.h'
 
-#compile_flags += -g -ggdb
+compile_flags += $(at.variant_cflags)
 compile_flags += -DHAVE_CONFIG_H
 compile_flags += -I"$(dir $/)" -I"$(dir $/)/config"
 compile = $(c++.compiler) $(compile_flags)

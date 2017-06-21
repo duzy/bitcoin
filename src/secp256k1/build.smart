@@ -1,12 +1,13 @@
 project secp256k1
 
 import (
+    '../../@'
     'tools/gcc/c'
 )
 
 files '*.o' '*.a' '*.c' '*.h'
 
-#compile_flags += -g -ggdb
+compile_flags += $(at.variant_cflags)
 compile_flags += -DHAVE_CONFIG_H
 compile_flags += -I"$/"
 compile = $(c.compiler) $(compile_flags)

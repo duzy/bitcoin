@@ -1,12 +1,13 @@
 project memenv
 
 import (
+    '../../../../@'
     'tools/gcc/c++'
 )
 
 files '*.cc' '*.o' '*.a'
 
-#compile_flags += -g -ggdb
+compile_flags += $(at.variant_cflags)
 compile_flags += -DLEVELDB_PLATFORM_POSIX
 compile_flags += -I"$(dirdir $/)" -I"$(dirdir $/)/include"
 compile = $(c++.compiler) $(compile_flags)

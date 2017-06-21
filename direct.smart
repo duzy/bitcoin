@@ -1,10 +1,13 @@
 project core
 
-import './src'
+import (
+    './@'
+    './src'
+)
 
 libs = $(src.xlibs)
 
-debug: src.archives src.objects src.programs
+build: src.archives src.objects src.programs
 clean: src.clean
 
 use:

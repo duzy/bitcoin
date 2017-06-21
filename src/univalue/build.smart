@@ -1,12 +1,13 @@
 project univalue
 
 import (
+    '../../@'
     'tools/gcc/c++'
 )
 
 files '*.o' '*.a' '*.cpp' '*.h'
 
-#compile_flags += -g -ggdb
+compile_flags += $(at.variant_cflags)
 compile_flags += -I"$//include"
 compile = $(c++.compiler) $(compile_flags)
 
