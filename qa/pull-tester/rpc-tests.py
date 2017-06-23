@@ -42,11 +42,11 @@ RPC_TESTS_DIR = SRCDIR + '/qa/rpc-tests/'
 
 #If imported values are not defined then set to zero (or disabled)
 if 'ENABLE_WALLET' not in vars():
-    ENABLE_WALLET=0
+    ENABLE_WALLET=1
 if 'ENABLE_BITCOIND' not in vars():
-    ENABLE_BITCOIND=0
+    ENABLE_BITCOIND=1
 if 'ENABLE_UTILS' not in vars():
-    ENABLE_UTILS=0
+    ENABLE_UTILS=1
 if 'ENABLE_ZMQ' not in vars():
     ENABLE_ZMQ=0
 

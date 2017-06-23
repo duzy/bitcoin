@@ -226,6 +226,23 @@ def wait_for_bitcoind_start(process, url, i):
                 raise # unknown JSON RPC exception
         time.sleep(0.25)
 
+def get_bitcoind_binary():
+    s = ""
+    b = "bitcoind"
+    d = os.path.dirname(sys.argv[0])
+
+    while True:
+        s = os.path.join(d, b)
+        if os.path.exists(s): break
+        s = os.path.join(d, 'src', b)
+        if os.path.exists(s): break
+        s = "" # clear s
+        d = os.path.dirname(d)
+        if d == "" or d == "/": break
+        
+    if s == "": s = b
+    return os.getenv("BITCOIND", s)
+
 def initialize_chain(test_dir, num_nodes, cachedir):
     """
     Create a cache of a 200-block-long chain (with wallet) for MAX_NODES
@@ -245,14 +262,15 @@ def initialize_chain(test_dir, num_nodes, cachedir):
         for i in range(MAX_NODES):
             if os.path.isdir(os.path.join(cachedir,"node"+str(i))):
                 shutil.rmtree(os.path.join(cachedir,"node"+str(i)))
-
+       
         # Create cache directories, run bitcoinds:
         for i in range(MAX_NODES):
             datadir=initialize_datadir(cachedir, i)
-            args = [ os.getenv("BITCOIND", "bitcoind"), "-server", "-keypool=1", "-datadir="+datadir, "-discover=0" ]
+            args = [ get_bitcoind_binary(), "-server", "-keypool=1", "-datadir="+datadir, "-discover=0" ]
             if i > 0:
                 args.append("-connect=127.0.0.1:"+str(p2p_port(0)))
-            bitcoind_processes[i] = subprocess.Popen(args)
+            print("node-%i: %s" % (i, args))
+            bitcoind_processes[i] = subprocess.Popen(args) #,stdout=subprocess.PIPE)
             if os.getenv("PYTHON_DEBUG", ""):
                 print("initialize_chain: bitcoind started, waiting for RPC to come up")
             wait_for_bitcoind_start(bitcoind_processes[i], rpc_url(i), i)
@@ -335,7 +353,7 @@ def start_node(i, dirname, extra_args=None, rpchost=None, timewait=None, binary=
     """
     datadir = os.path.join(dirname, "node"+str(i))
     if binary is None:
-        binary = os.getenv("BITCOIND", "bitcoind")
+        binary = get_bitcoind_binary()
     args = [ binary, "-datadir="+datadir, "-server", "-keypool=1", "-discover=0", "-rest", "-mocktime="+str(get_mocktime()) ]
     if extra_args is not None: args.extend(extra_args)
     bitcoind_processes[i] = subprocess.Popen(args)

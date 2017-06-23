@@ -172,8 +172,7 @@ bool AppInit(int argc, char* argv[])
         }
 
         if (!GetAppSignals().PreInitMain(threadGroup, scheduler)) {
-          fprintf(stderr, "Error: pre-initialization failed\n");
-          return false;
+          fprintf(stderr, "Warning: core pre-initialization failed\n");
         }
 
         fRet = AppInitMain(threadGroup, scheduler);
