@@ -269,7 +269,7 @@ def initialize_chain(test_dir, num_nodes, cachedir):
             args = [ get_bitcoind_binary(), "-server", "-keypool=1", "-datadir="+datadir, "-discover=0" ]
             if i > 0:
                 args.append("-connect=127.0.0.1:"+str(p2p_port(0)))
-            print("node-%i: %s" % (i, args))
+            print("node%i: %s" % (i, args))
             bitcoind_processes[i] = subprocess.Popen(args) #,stdout=subprocess.PIPE)
             if os.getenv("PYTHON_DEBUG", ""):
                 print("initialize_chain: bitcoind started, waiting for RPC to come up")
