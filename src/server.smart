@@ -56,5 +56,5 @@ $(server_lib): lib.a($(server_lib) $(server_objects))
 bitcoind:[(compare) (stderr) (shell)]: bitcoind.o
 	$(LINK) -o $@ $^ -L. $(LDFLAGS) $(svrlibs)
 
-link-svr:[(cd) ((bin objects)) (compare bin) (stdout) (stderr) (shell)]: $objects
-	$(LINK) -o $bin $objects -L$/ $(LDFLAGS) $(svrlibs)
+link-svr:[(cd) ((bin objects)) (compare bin) (stdout) (stderr) (shell)]: $(objects)
+	$(LINK) -o $(bin) $(objects) -L$/ $(LDFLAGS) $(svrlibs)
