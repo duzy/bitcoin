@@ -1,6 +1,0 @@
-project at
-
-variant = debug
-variant_cflags = -g -ggdb
-#variant = release
-#variant_cflags =

@@ -1,7 +1,5 @@
 project src
 
-files '*.h' '*.cpp' '*.o' '*.a'
-
 libbitcoin_wallet.a:[(compare) (stderr) (shell)]: \
   wallet/crypter.o \
   wallet/db.o \
@@ -10,4 +8,4 @@ libbitcoin_wallet.a:[(compare) (stderr) (shell)]: \
   wallet/wallet.o \
   wallet/walletdb.o \
   policy/rbf.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^

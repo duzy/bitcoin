@@ -1,6 +1,4 @@
-project src
-
-files '*.h' '*.cpp' '*.o' '*.a'
+project
 
 libbitcoin_consensus.a:[(compare) (stderr) (shell)]: \
   arith_uint256.o consensus/merkle.o hash.o primitives/block.o \
@@ -11,4 +9,4 @@ libbitcoin_consensus.a:[(compare) (stderr) (shell)]: \
   script/script_error.o \
   uint256.o \
   utilstrencodings.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^

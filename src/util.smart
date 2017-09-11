@@ -18,4 +18,4 @@ libbitcoin_util.a:[(compare) (stderr) (shell)]: \
   utilmoneystr.o \
   utilstrencodings.o \
   utiltime.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^

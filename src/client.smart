@@ -1,6 +1,6 @@
-project src
+project
 
-files '*.o' '*.a' 'bitcoin-cli'
+files 'bitcoin-cli'
 
 clilibs = \
   -lbitcoin_cli \
@@ -20,7 +20,7 @@ clilibs = \
   -lpthread
 
 libbitcoin_cli.a:[(compare) (stderr) (shell)]: rpc/client.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^
 
 bitcoin-cli:[(compare) (stderr) (shell)]: bitcoin-cli.o
-	$(link) -o $@ $^ -L. $(clilibs)
+	$(LINK) -o $@ $^ -L. $(clilibs)

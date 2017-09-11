@@ -1,31 +1,23 @@
-project secp256k1
+project (tools/gcc/c)
 
-import (
-    '../../@'
-    'tools/gcc/c'
-)
-
-files '*.o' '*.a' '*.c' '*.h'
-
-compile_flags += $(at.variant_cflags)
-compile_flags += -DHAVE_CONFIG_H
-compile_flags += -I"$/"
-compile = $(c.compiler) $(compile_flags)
+CXXFLAGS += $(@.variant_cflags)
+CXXFLAGS += -DHAVE_CONFIG_H
+CXXFLAGS += -I"$/"
 
 libsecp256k1.a:[(compare) (stderr) (shell)]: src/secp256k1.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^
 
 libsecp256k1_common.a:[(compare) (stderr) (shell)]: src/asm/field_10x26_arm.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^
 
 %.o:[(compare) (stderr) (shell)]: %.c
-	$(compile) $^ -o $@
+	$(COMPILE) -I$/ $^ -o $@
 
 clean:[(stderr) (stdout) (shell)]
 	@echo "clean: $." && rm -vf \
 	src/*.o src/asm/*.o .libs/* *.o *.a *.lo *.la
 
 use:
-	compile_flags += -I"$//include"
-	link_flags += -L"$/"
-	libs += -lsecp256k1
+	CXXFLAGS += -I"$//include"
+	LDFLAGS += -L"$/"
+	LDLIBS += -lsecp256k1

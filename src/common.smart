@@ -1,6 +1,4 @@
-project src
-
-files '*.h' '*.cpp' '*.o' '*.a'
+project
 
 libbitcoin_common.a:[(compare) (stderr) (shell)]: \
   amount.o base58.o chainparams.o coins.o compressor.o \
@@ -8,5 +6,5 @@ libbitcoin_common.a:[(compare) (stderr) (shell)]: \
   netbase.o protocol.o scheduler.o \
   script/sign.o script/standard.o \
   warnings.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^
 

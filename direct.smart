@@ -1,7 +1,6 @@
 project core
 
 import (
-    './@'
     './src'
 )
 
@@ -11,7 +10,7 @@ build: src.archives src.objects src.programs
 clean: src.clean
 
 use:
-	compile_flags += -I"$//src"
-	link_flags += -L"$//src"
-	libs += "$//src/bitcoind-bitcoind.o"
-	libs += $(libs)
+	CXXFLAGS += -I"$//src"
+	LDFLAGS += -L"$//src"
+#	LDLIBS += "$//src/bitcoind.o"
+	LDLIBS += $(libs)

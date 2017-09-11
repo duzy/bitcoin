@@ -1,8 +1,6 @@
-project src
+project (tools/gcc/c++)
 
 import (
-    '../@'
-    'tools/gcc/c++'
     './crypto'
     './univalue'
     './secp256k1'
@@ -10,15 +8,10 @@ import (
     './leveldb/helpers/memenv'  
 )
 
-files '*.h' '*.cpp' '*.o' '*.a'
-
-compile_flags += $(at.variant_cflags)
-compile_flags += -DHAVE_CONFIG_H
-compile_flags += -DBOOST_NO_CXX11_SCOPED_ENUMS
-compile_flags += -I"$/" -I"$//config"
-compile = $(c++.compiler) $(compile_flags)
-
-link = $(c++.linker) $(link_flags)
+CXXFLAGS += $(@.variant_cflags)
+CXXFLAGS += -DHAVE_CONFIG_H
+CXXFLAGS += -DBOOST_NO_CXX11_SCOPED_ENUMS
+CXXFLAGS += -I"$/" -I"$//config"
 
 archives: use.* \
   libbitcoin_common.a \
@@ -37,7 +30,7 @@ objects:[(compare) (stderr) (shell)]: bitcoind.o
 	@cp -vf $< bitcoind-bitcoind.o
 
 %.o:[(compare) (stderr) (shell)]: %.cpp
-	$(compile) $< -o $@
+	$(COMPILE) $(CXXFLAGS) $< -o $@
 
 clean:[(stderr) (stdout) (shell)]: \
   crypto.clean \

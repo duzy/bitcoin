@@ -1,29 +1,21 @@
-project crypto
+project (tools/gcc/c++)
 
-import (
-    '../../@'
-    'tools/gcc/c++'
-)
-
-files '*.o' '*.a' '*.cpp' '*.h'
-
-compile_flags += $(at.variant_cflags)
-compile_flags += -DHAVE_CONFIG_H
-compile_flags += -I"$(dir $/)" -I"$(dir $/)/config"
-compile = $(c++.compiler) $(compile_flags)
+CXXFLAGS += $(@.variant_cflags)
+CXXFLAGS += -DHAVE_CONFIG_H
+CXXFLAGS += -I"$(dir $/)" -I"$(dir $/)/config"
 
 libbitcoin_crypto.a:[(compare) (stderr) (shell)]: \
   aes.o hmac_sha256.o hmac_sha512.o \
   ripemd160.o sha1.o sha256.o sha512.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^
 
 %.o:[(compare) (stderr) (shell)]: %.cpp
-	$(compile) $^ -o $@
+	$(COMPILE) $^ -o $@
 
 use:
-	compile_flags += -I"$//include"
-	link_flags += -L"$/"
-	libs += -lbitcoin_crypto
+	CXXFLAGS += -I"$//include"
+	LDFLAGS += -L"$/"
+	LDLIBS += -lbitcoin_crypto
 
 clean:[(stderr) (stdout) (shell)]
 	@echo "clean: $." && rm -vf *.o *.lo *.la *.a .libs/*

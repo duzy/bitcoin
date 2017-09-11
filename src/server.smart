@@ -1,6 +1,6 @@
-project src
+project
 
-files '*.h' '*.cpp' '*.o' '*.a' 'bitcoind'
+files 'bitcoind'
 
 xlibs = \
   -lbitcoin_server \
@@ -47,7 +47,7 @@ libbitcoin_server.a:[(compare) (stderr) (shell)]: \
   timedata.o torcontrol.o txdb.o txmempool.o \
   ui_interface.o validation.o validationinterface.o \
   versionbits.o
-	$(archive) $@ $^
+	$(ARCHIVE) $@ $^
 
 bitcoind:[(compare) (stderr) (shell)]: bitcoind.o
-	$(link) -o $@ $^ -L. $(svrlibs)
+	$(LINK) -o $@ $^ -L. $(svrlibs)
