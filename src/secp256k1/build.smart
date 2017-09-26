@@ -1,13 +1,13 @@
 project (tools/gcc/c)
 
 files (
-#    '*.o' => src
-#    '*.h' => src
-#    '*.c' => src
+#    *.o => src
+#    *.h => src
+#    *.c => src
     gen_context
 )
 
-CFLAGS += $(@.variant_cflags)
+CFLAGS += $(@->variant_cflags)
 CFLAGS += -DHAVE_CONFIG_H
 CFLAGS += -I"$/"
 
@@ -16,16 +16,16 @@ lib2 := libsecp256k1_common.a
 objects1 := src/secp256k1.o
 objects2 := src/asm/field_10x26_arm.o
 
-$(lib1): src/ecmult_static_context.h c.'lib.a'($(lib1) $(objects1))
-$(lib2): c.'lib.a'($(lib2) $(objects2))
+$(lib1): src/ecmult_static_context.h c->lib.a($(lib1) $(objects1))
+$(lib2): c->lib.a($(lib2) $(objects2))
 
-src/ecmult_static_context.h:[(stderr) (stdout) (shell)]: gen_context
+src/ecmult_static_context.h:[(shell -oe)]: gen_context
 	./gen_context
 
-gen_context:[(stderr) (stdout) (shell)]: src/gen_context.c
+gen_context:[(shell -oe)]: src/gen_context.c
 	$(CXX) -I$/ -o $@ $^
 
-clean:[(stderr) (stdout) (shell)]
+clean:[(shell -oe)]
 	@echo "clean: $." && rm -vf \
 	src/*.o src/asm/*.o .libs/* *.o *.a *.lo *.la
 

@@ -1,6 +1,6 @@
 project
 
-files '*.o' 'bitcoin-tx'
+files *.o bitcoin-tx
 
 txlibs = \
   -lbitcoin_cli \
@@ -22,5 +22,5 @@ txlibs = \
   -lboost_chrono \
   -lpthread
 
-bitcoin-tx:[(compare) (stderr) (shell)]: bitcoin-tx.o
+bitcoin-tx:[(compare) (shell -e)]: bitcoin-tx.o
 	$(LINK) -o $@ $^ -L. $(LDFLAGS) $(txlibs)

@@ -1,6 +1,6 @@
 project (tools/gcc/c++)
 
-CXXFLAGS += $(@.variant_cflags)
+CXXFLAGS += $(@->variant_cflags)
 CXXFLAGS += -DLEVELDB_PLATFORM_POSIX
 CXXFLAGS += -I"$(dirdir $/)" -I"$(dirdir $/)/include"
 
@@ -9,7 +9,7 @@ objects := memenv.o
 
 $(lib): lib.a($(lib) $(objects))
 
-clean:[(stderr) (stdout) (shell)]
+clean:[(shell -oe)]
 	@echo "clean: $." && rm -vf *.a *.o
 
 use:

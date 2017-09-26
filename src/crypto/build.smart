@@ -1,6 +1,6 @@
 project (tools/gcc/c++)
 
-CXXFLAGS += $(@.variant_cflags)
+CXXFLAGS += $(@->variant_cflags)
 CXXFLAGS += -DHAVE_CONFIG_H
 CXXFLAGS += -I"$(dir $/)" -I"$(dir $/)/config"
 

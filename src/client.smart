@@ -1,6 +1,6 @@
 project
 
-files 'bitcoin-cli'
+files bitcoin-cli
 
 clilibs = \
   -lbitcoin_cli \
@@ -24,8 +24,8 @@ client_objects := rpc/client.o
 
 $(client_lib): lib.a($(client_lib) $(client_objects))
 
-bitcoin-cli:[(compare) (stderr) (shell)]: bitcoin-cli.o
+bitcoin-cli:[(compare) (shell -e)]: bitcoin-cli.o
 	$(LINK) -o $@ $^ -L. $(LDFLAGS) $(clilibs)
 
-link-cli:[(cd) ((bin objects)) (compare bin) (stdout) (stderr) (shell)]: $(objects)
+link-cli:[(cd) ((bin objects)) (compare bin) (shell -oe)]: $(objects)
 	$(LINK) -o $(bin) $(objects) -L$/ $(LDFLAGS) $(clilibs)

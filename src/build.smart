@@ -1,14 +1,14 @@
 project (tools/gcc/c++)
 
 import (
-    './crypto'
-    './univalue'
-    './secp256k1'
-    './leveldb'
-    './leveldb/helpers/memenv'  
+    ./crypto
+    ./univalue
+    ./secp256k1
+    ./leveldb
+    ./leveldb/helpers/memenv
 )
 
-CXXFLAGS += $(@.variant_cflags)
+CXXFLAGS += $(@->variant_cflags)
 CXXFLAGS += -DHAVE_CONFIG_H
 CXXFLAGS += -DBOOST_NO_CXX11_SCOPED_ENUMS
 CXXFLAGS += -I"$/" -I"$//config"
@@ -26,14 +26,14 @@ programs: \
   bitcoin-tx \
   bitcoind
 
-objects:[(stderr) (shell)]: bitcoind.o
+objects: bitcoind.o
 
-clean:[(stderr) (stdout) (shell)]: \
-  crypto.clean \
-  univalue.clean \
-  secp256k1.clean \
-  leveldb.clean \
-  memenv.clean
+clean:[(shell -oe)]: \
+  crypto->clean \
+  univalue->clean \
+  secp256k1->clean \
+  leveldb->clean \
+  memenv->clean
 	@echo "clean: $." && rm -vf *.o *.a *.lo *.la \
 	script/*.o consensus/*.o primitives/.o policy/.o \
 	rpc/*.o support/*.o wallet/*.o \

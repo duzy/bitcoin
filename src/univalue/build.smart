@@ -1,13 +1,13 @@
 project (tools/gcc/c++)
 
 files (
-    '*.a'
-    #'*.o' => lib
-    #'*.cpp' => lib
+    *.a
+    #*.o => lib
+    #*.cpp => lib
 )
 
 CXXFLAGS := $(CXXFLAGS)
-CXXFLAGS += $(@.variant_cflags) -I"$//include"
+CXXFLAGS += $(@->variant_cflags) -I"$//include"
 
 lib = libunivalue.a
 objects = lib/univalue.o lib/univalue_read.o lib/univalue_write.o

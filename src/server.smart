@@ -1,6 +1,6 @@
 project
 
-files 'bitcoind'
+files bitcoind
 
 xlibs = \
     -lbitcoin_server \
@@ -53,8 +53,8 @@ server_objects := \
 
 $(server_lib): lib.a($(server_lib) $(server_objects))
 
-bitcoind:[(compare) (stderr) (shell)]: bitcoind.o
+bitcoind:[(compare) (shell -e)]: bitcoind.o
 	$(LINK) -o $@ $^ -L. $(LDFLAGS) $(svrlibs)
 
-link-svr:[(cd) ((bin objects)) (compare bin) (stdout) (stderr) (shell)]: $(objects)
+link-svr:[(cd) ((bin objects)) (compare bin) (shell -oe)]: $(objects)
 	$(LINK) -o $(bin) $(objects) -L$/ $(LDFLAGS) $(svrlibs)

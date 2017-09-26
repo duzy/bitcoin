@@ -1,13 +1,13 @@
 project core
 
 import (
-    './src'
+    ./src
 )
 
-libs = $(src.xlibs)
+libs = $(src->xlibs)
 
-build: src.archives src.objects src.programs
-clean: src.clean
+build: src->archives src->objects src->programs
+clean: src->clean
 
 use:
 #	compile_flags += -I"$//src"
