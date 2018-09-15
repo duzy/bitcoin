@@ -1,4 +1,4 @@
-Blockchain Core for Applications
+Bitcoin Core Work Fork
 ================================
 
 This fork of the bitcoin core is attempting to carve it into a blockchain toolkit for
