@@ -6,4 +6,6 @@ applications.
 
 **Warnings: changes committed in this fork are experimental, take it on your own risks!**
 
-[Wiki Pages](https://github.com/duzy/bitcoin-core/wiki)
+## More Links
+
+* [Wiki Pages](https://github.com/duzy/bitcoin-core/wiki)
